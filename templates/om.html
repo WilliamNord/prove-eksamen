@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block tittel %}Forsiden{% endblock %}
+
+{% block innhold %}
+    <h1>Velkommen!</h1>
+    <p>Dette er forsiden til min Flask-app.</p>
+
+    {% if navn %}
+        <p>Hei, {{ navn }}! Hyggelig aa se deg.</p>
+    {% else %}
+        <p>Hei, gjest! dette er om</p>
+        <p> {{ navn }} </p>
+    {% endif %}
+{% endblock %}
