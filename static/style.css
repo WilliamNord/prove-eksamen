@@ -40,3 +40,20 @@ footer {
     border-top: 1px solid #ccc;
     color: #666;
 }
+
+#flash-container{
+    position: fixed;
+    top: 20px;
+    right: 20px;
+}
+
+.flash-message{
+    background: #222;
+    color: white;
+    padding: 12px 18px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    opacity: 1;
+    /* transition passer på at meldingen fader ut */
+    transition: opacity 0.5s ease;
+}

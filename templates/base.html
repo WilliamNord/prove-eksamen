@@ -11,9 +11,28 @@
         <a href="/">Forside</a>
         <a href="/om">Om</a>
         <a href="/messages">Meldinger</a>
+
+        {# viser bare visse knapper kommende ann på om brukeren er logget inn eller ikke #}
+        {% if session.get("user_id") %}
+        <a href="/logout">Logout</a>
+        {% else %}
         <a href="/login">Login</a>
         <a href="/signup">Sign up</a>
+        {% endif %}
     </nav>
+
+    {# henter flash-meldinger og sletter dem fra session #}
+    {# alle refreshes etter dette vil flashmeldingen ikke finnes #}
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div id="flash-container">
+                {# lager en container for alle flash-meldinger #}
+                {% for message in messages %}
+                    <div class="flash-message">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
 
     <main>
         {% block innhold %}{% endblock %}
@@ -22,5 +41,23 @@
     <footer>
         <p>Laget med Flask</p>
     </footer>
+
+    {# meldingen om at du er logget ut fader etter 3 sekunder #}
+    <script>
+    
+    // gjør flashmeldingen usynlig etter 3 sekunder, og fjerner den helt etter 3.5 sekunder
+    setTimeout(() => {
+        const flashes = document.querySelectorAll(".flash-message");
+
+        flashes.forEach(msg => {
+            msg.style.opacity = "0";
+
+            setTimeout(() => {
+                msg.remove();
+            }, 500);
+        });
+
+    }, 3000);
+</script>
 </body>
 </html>
