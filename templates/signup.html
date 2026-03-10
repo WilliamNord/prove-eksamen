@@ -3,12 +3,9 @@
 {% block tittel %}Forsiden{% endblock %}
 
 {% block innhold %}
-    <h1>LOG IN</h1>
-    <p>Her kan du logge in</p>
+    <h1>SIGN UP</h1>
+    <p>Her kan du registrere deg som en ny bruker</p>
 
-    {# dette er en post som sendes tilbake til app.py i en if-setning #}
-    {# det du skriver her blir lagret som variabler og executed i mariaDB #}
-    {# bruker hashing så den sammenligner passord i database og den du sender inn #}
     <form method="post">
         <input type="text" name="username" placeholder="Brukernavn" required>
         <input type="password" name="password" placeholder="Passord" required>
