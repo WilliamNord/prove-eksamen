@@ -84,7 +84,7 @@ def dbtest():
         result = cur.fetchone()
         # returnerer ('Hei fra databasen!',) og henter første index.
         conn.close()
-        return f"Database OK: {result[0]} result tupple: {result}"
+        return f"Database OK: {result[0]} result tupple: {result} {session['user_id']}"
     except mysql.connector.Error as e:
         return f"Database error: {e}"
 
