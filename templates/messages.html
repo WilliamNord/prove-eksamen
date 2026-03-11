@@ -1,6 +1,14 @@
 {% extends "base.html" %}
 
 {% block innhold %}
-<h1>Velkommen</h1>
-<p>Dette er meldingssiden</p>
+    <h1>Velkommen</h1>
+    <p>Dette er meldingssiden</p>
+    
+    {% if session.get("user_id") %}
+    <p> placeholder "her skal meldinger ligge :D</p>
+    {% else %}
+    <p> du er ikke logget in</p>
+    <a href="/login">Login</a>
+    {% endif %}
+
 {% endblock %}
