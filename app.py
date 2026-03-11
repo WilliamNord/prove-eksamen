@@ -1,10 +1,13 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 from db import get_db
 from werkzeug.security import generate_password_hash, check_password_hash
+from dotenv import load_dotenv
+import os
 
+load_dotenv()  # laster inn .env filen
 
 app = Flask(__name__)
-app.secret_key = "hemmelig_nokkel"
+app.secret_key = os.getenv("SECRET_KEY")
 
 @app.route("/")
 def forside():
