@@ -1,14 +1,64 @@
 {% extends "base.html" %}
 
 {% block innhold %}
-    <h1>Velkommen</h1>
-    <p>Dette er meldingssiden</p>
-    
-    {% if session.get("user_id") %}
-    <p> placeholder "her skal meldinger ligge :D</p>
-    {% else %}
-    <p> du er ikke logget in</p>
-    <a href="/login">Login</a>
-    {% endif %}
+
+<div class="chat-container">
+
+    <div class="conversation-list">
+
+        <h3>Samtaler</h3>
+        {% for user in conversations %}
+            <a href="/messages/{{ user.id }}">
+                <div class="conversation">
+                    {{ user.username }}
+                </div>
+            </a>
+        {% else %}
+            <p>Ingen samtaler enda</p>
+        {% endfor %}
+
+        <hr>
+
+        <h3>Ny samtale</h3>
+        <form method="POST" action="/send_message">
+            <select name="receiver_id" required>
+                <option value="">Velg bruker</option>
+                {% for user in all_users %}
+                    {# tideligere error med at value ikke var oppgitt #}
+                    <option value="{{ user.id }}">{{ user.username }}</option>
+                {% endfor %}
+            </select>
+            <input type="text" name="message" placeholder="Skriv melding her" required>
+            <button type="submit">Send</button>
+        </form>
+
+    </div>
+
+    <div class="chat-area">
+
+        {# henter alle meldinger med den andre brukeren gitt ved other_user_id #}
+        <div class="messages">
+            {% for msg in messages %}
+                <div class="message">
+                    <strong>{{ msg.username }}</strong>: {{ msg.message }}
+                </div>
+            {% else %}
+                <p>Velg en samtale til venstre.</p>
+            {% endfor %}
+        </div>
+
+        {% if other_user_id %}
+        <div class="message-input">
+            <form method="POST" action="/send_message">
+                <input type="hidden" name="receiver_id" value="{{ other_user_id }}">
+                <input type="text" name="message" placeholder="Skriv melding..." required>
+                <button type="submit">Send</button>
+            </form>
+        </div>
+        {% endif %}
+
+    </div>
+
+</div>
 
 {% endblock %}

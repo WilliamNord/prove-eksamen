@@ -19,8 +19,73 @@ def om_oss():
     return render_template("om.html")
 
 @app.route("/messages")
-def messages():
-    return render_template("messages.html")
+@app.route("/messages/<int:other_user_id>")
+def messages(other_user_id=None):
+    if not session.get("user_id"):
+        flash("Du må være logget inn for å se meldingene dine")
+        return redirect(url_for("login"))
+
+    user_id = session["user_id"]
+    conn = get_db()
+    #henter data som keys og values
+    cur = conn.cursor(dictionary=True)
+
+    # Henter alle brukere du har hatt samtale med
+    cur.execute("""
+        SELECT DISTINCT u.id, u.username
+        FROM users u
+        JOIN messages m ON (m.sender_id = u.id OR m.receiver_id = u.id)
+        WHERE (m.sender_id = %s OR m.receiver_id = %s)
+        AND u.id != %s
+    """, (user_id, user_id, user_id))
+    conversations = cur.fetchall()
+
+    # Henter alle brukere som ikke er deg
+    cur.execute("SELECT id, username FROM users WHERE id != %s", (user_id,))
+    all_users = cur.fetchall()
+
+    # Henter meldinger i den åpne samtalen (hvis det er en)
+    msgs = []
+    if other_user_id:
+        cur.execute("""
+            SELECT m.content AS message, u.username
+            FROM messages m
+            JOIN users u ON m.sender_id = u.id
+            WHERE (m.sender_id = %s AND m.receiver_id = %s)
+               OR (m.sender_id = %s AND m.receiver_id = %s)
+            ORDER BY m.sent_at ASC
+        """, (user_id, other_user_id, other_user_id, user_id))
+        msgs = cur.fetchall()
+
+    conn.close()
+
+    return render_template("messages.html",
+        conversations=conversations,
+        messages=msgs,
+        other_user_id=other_user_id,
+        all_users=all_users
+    )
+
+
+@app.route("/send_message", methods=["POST"])
+def send_message():
+    if not session.get("user_id"):
+        return redirect(url_for("login"))
+
+    sender_id = session["user_id"]
+    receiver_id = request.form["receiver_id"]
+    message = request.form["message"]
+
+    conn = get_db()
+    cur = conn.cursor()
+    cur.execute(
+        "INSERT INTO messages (sender_id, receiver_id, content) VALUES (%s, %s, %s)",
+        (sender_id, receiver_id, message)
+    )
+    conn.commit()
+    conn.close()
+
+    return redirect(url_for("messages", other_user_id=receiver_id))
 
 @app.route("/login", methods=["GET", "POST"])
 def login():

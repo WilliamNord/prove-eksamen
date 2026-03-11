@@ -61,3 +61,20 @@ footer {
     /* transition passer på at meldingen fader ut */
     transition: opacity 0.5s ease;
 }
+
+
+.chat-container {
+    display: flex;
+    height: 500px;
+}
+
+.conversation-list {
+    width: 30%;
+    border-right: 1px solid #ccc;
+    padding: 10px;
+}
+
+.chat-window {
+    width: 70%;
+    padding: 10px;
+}
