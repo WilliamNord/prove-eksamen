@@ -17,6 +17,7 @@
             {# viser bare visse knapper kommende ann på om brukeren er logget inn eller ikke #}
             {% if session.get("user_id") %}
             <a href="/settings">Innstillinger</a>
+                
             <a href="/logout">Logout</a>
             <p id="login_name"> logged in as {{session.get("username") }} </p>
             {% else %}
