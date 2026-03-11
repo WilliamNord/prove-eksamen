@@ -1,14 +1,18 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 from db import get_db
 from werkzeug.security import generate_password_hash, check_password_hash
+from cryptography.fernet import Fernet
 from dotenv import load_dotenv
 import os
 
-#laster .env filen
+#henter .env filen
 load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY")
+
+# henter krypteringsnøkkelen fra .env
+fernet = Fernet(os.getenv("MESSAGE_KEY"))
 
 @app.route("/")
 def forside():
@@ -59,7 +63,11 @@ def messages(other_user_id=None):
                OR (m.sender_id = %s AND m.receiver_id = %s)
             ORDER BY m.sent_at ASC
         """, (user_id, other_user_id, other_user_id, user_id))
-        msgs = cur.fetchall()
+        row_msgs = cur.fetchall()
+
+        for msg in row_msgs:
+            msg["message"] = fernet.decrypt(msg["message"].encode()).decode()
+        msgs = row_msgs
 
     conn.close()
 
@@ -80,12 +88,15 @@ def send_message():
     sender_id = session["user_id"]
     receiver_id = request.form["receiver_id"]
     message = request.form["message"]
+    
+    # krypterer meldingen før den lagres i databasen
+    encrypted_message = fernet.encrypt(message.encode()).decode()
 
     conn = get_db()
     cur = conn.cursor()
     cur.execute(
         "INSERT INTO messages (sender_id, receiver_id, content) VALUES (%s, %s, %s)",
-        (sender_id, receiver_id, message)
+        (sender_id, receiver_id, encrypted_message)
     )
     conn.commit()
     conn.close()
