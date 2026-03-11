@@ -50,7 +50,8 @@ def login():
             session["username"] = username
             return redirect(url_for("forside"))
         else:
-            return "Feil brukernavn eller passord"
+            flash("Feil brukernavn eller passord")
+            return redirect(url_for("login"))
 
     return render_template("login.html")
 
