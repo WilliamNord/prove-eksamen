@@ -1,2 +1,2 @@
-# .env filen skal ikke versjoneres i github
+# .env filen skal ikke ligge i github
 .env

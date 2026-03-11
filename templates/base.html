@@ -15,6 +15,7 @@
         {# viser bare visse knapper kommende ann på om brukeren er logget inn eller ikke #}
         {% if session.get("user_id") %}
         <a href="/logout">Logout</a>
+        <p id="login_name"> logged in as {{session.get("username") }} </p>
         {% else %}
         <a href="/login">Login</a>
         <a href="/signup">Sign up</a>
@@ -42,9 +43,8 @@
         <p>Laget med Flask</p>
     </footer>
 
-    {# meldingen om at du er logget ut fader etter 3 sekunder #}
     <script>
-    
+        
     // gjør flashmeldingen usynlig etter 3 sekunder, og fjerner den helt etter 3.5 sekunder
     setTimeout(() => {
         const flashes = document.querySelectorAll(".flash-message");

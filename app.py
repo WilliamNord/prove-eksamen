@@ -4,7 +4,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from dotenv import load_dotenv
 import os
 
-load_dotenv()  # laster inn .env filen
+#laster .env filen
+load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY")
@@ -46,6 +47,7 @@ def login():
         if user and check_password_hash(user[1], password):
             #lagrer i session at du er logget in og sender deg tilbake til forsiden.
             session["user_id"] = user[0]
+            session["username"] = username
             return redirect(url_for("forside"))
         else:
             return "Feil brukernavn eller passord"
