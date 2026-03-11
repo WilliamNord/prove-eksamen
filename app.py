@@ -26,6 +26,40 @@ def om_oss():
 def privacy():
     return render_template("privacy.html")
 
+@app.route("/settings", methods=["GET", "POST"])
+def settings():
+
+    if not session.get("user_id"):
+        flash("Du må være logget inn for å se innstillinger")
+        return redirect(url_for("login"))
+
+    if request.method == "POST":
+        user_id = session.get("user_id")
+        confirm = request.form["username"]
+
+        if confirm != session.get("username"):
+            flash("Bekreftelse mislyktes. Skriv inn ditt brukernavn for å bekrefte.")
+            return redirect(url_for("settings"))
+
+        conn = get_db()
+        cur = conn.cursor()
+
+        # sletter meldinger først, så foreign key ikke krasjer
+        cur.execute("DELETE FROM messages WHERE sender_id = %s OR receiver_id = %s", (user_id, user_id))
+
+        # sletter så brukeren
+        cur.execute("DELETE FROM users WHERE id = %s", (user_id,))
+        conn.commit()
+        conn.close()
+
+        session.clear()
+        flash("Brukeren din har blitt slettet.")
+        
+        return redirect(url_for("forside"))
+
+    return render_template("settings.html")
+
+
 @app.route("/messages")
 @app.route("/messages/<int:other_user_id>")
 def messages(other_user_id=None):
@@ -177,7 +211,7 @@ def signup():
 #når du trykker logut sendes du til /logout, session tømmes og du blir sendt til forsiden
 @app.route("/logout")
 def logout():
-    session.pop("user_id", None)
+    session.clear()
     flash("Du har blitt logget ut")
     return redirect(url_for("forside"))
 
@@ -191,7 +225,7 @@ def dbtest():
         # returnerer ('Hei fra databasen!',) og henter første index.
         conn.close()
         return f"Database OK: {result[0]} result tupple: {result} {session['user_id']}"
-    except mysql.connector.Error as e:
+    except Exception as e:
         return f"Database error: {e}"
 
 

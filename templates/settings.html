@@ -2,5 +2,18 @@
 
 {% block innhold %}
     <h1>Velkommen</h1>
-    <p>Dette er setting siden hvor du skal kunne slette brukeren din</p>
+    <p>Dette er en settings side som for nå bare lar deg slette brukeren din.</p>
+
+    <form method="POST">
+        <input type="hidden" name="user_id" value="{{ session.get('user_id') }}">
+        {# brukeren må skrive brukenavnet for å slette brukeren #}
+        {# inspirert av github :D #}
+        <input type="text" name="username" placeholder="Skriv <{{ session.get('username') }}> for å bekrefte" required>
+        <button type="submit">Slett bruker</button>
+
+        <hr>
+            
+        <h6>du må skrive brukernavnet ditt for å slette brukeren</h6>
+        <h6>denne funksjonen er inspirert av GitHub :D</h6>
+    </form>
 {% endblock %}
