@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block tittel %}Personvernerklæring{% endblock %}
+
+{% block innhold %}
+
+<div class="privacy-container">
+
+    <div class="privacy-header">
+        <h1>Personvernerklæring</h1>
+        <p class="privacy-dato">Sist oppdatert: Mars 2026</p>
+    </div>
+
+    <div class="privacy-seksjon">
+        <h2>Hva vi samler inn</h2>
+        <ul>
+            <li><strong>Brukernavn</strong> – brukes til å identifisere deg</li>
+            <li><strong>Passord</strong> – lagres kryptert med SHA-256, aldri i klartekst</li>
+            <li><strong>Meldinger</strong> – meldinger du sender til andre brukere</li>
+        </ul>
+        <p>Vi samler <strong>ikke</strong> inn e-postadresse, telefonnummer eller annen personlig informasjon.</p>
+    </div>
+
+    <div class="privacy-seksjon">
+        <h2>Hvordan vi bruker informasjonen</h2>
+        <ul>
+            <li>La deg logge inn på din konto</li>
+            <li>Sende og motta meldinger til andre brukere</li>
+        </ul>
+        <p>Informasjonen brukes <strong>kun</strong> til dette, og deles ikke med noen tredjepart.</p>
+    </div>
+
+    <div class="privacy-seksjon">
+        <h2>Lagring</h2>
+        <p>All data lagres i en lokal database på vår server. Passord lagres alltid kryptert og kan ikke leses av noen.</p>
+    </div>
+
+    <div class="privacy-seksjon">
+        <h2>Sletting</h2>
+        <p>to be determined</p>
+    </div>
+
+</div>
+
+{% endblock %}

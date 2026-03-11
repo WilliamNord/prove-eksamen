@@ -18,6 +18,10 @@ def forside():
 def om_oss():
     return render_template("om.html")
 
+@app.route("/privacy")
+def privacy():
+    return render_template("privacy.html")
+
 @app.route("/messages")
 @app.route("/messages/<int:other_user_id>")
 def messages(other_user_id=None):
@@ -59,6 +63,7 @@ def messages(other_user_id=None):
 
     conn.close()
 
+    # laster meldinger med informasjonen mentet over
     return render_template("messages.html",
         conversations=conversations,
         messages=msgs,

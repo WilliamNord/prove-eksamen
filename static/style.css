@@ -78,3 +78,54 @@ footer {
     width: 70%;
     padding: 10px;
 }
+
+.privacy-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.privacy-header {
+    border-bottom: 2px solid #3ca3df;
+    padding-bottom: 10px;
+}
+
+.privacy-dato {
+    color: #888;
+    font-size: 0.9em;
+    margin-top: 5px;
+}
+
+.privacy-kort {
+    background: #eaf5ff;
+    border-left: 4px solid #3ca3df;
+    padding: 12px 16px;
+    border-radius: 4px;
+    color: #333;
+}
+
+.privacy-seksjon {
+    background: #f9f9f9;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 16px 20px;
+}
+
+.privacy-seksjon h2 {
+    color: #3ca3df;
+    margin-bottom: 10px;
+    font-size: 1.1em;
+}
+
+.privacy-seksjon ul {
+    margin: 10px 0 10px 20px;
+}
+
+.privacy-seksjon ul li {
+    margin-bottom: 6px;
+}
+
+.privacy-seksjon p {
+    color: #555;
+    margin-top: 8px;
+}
