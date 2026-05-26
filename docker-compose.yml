@@ -1,0 +1,31 @@
+services:
+  db:
+    image: mariadb:11
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: rootpass
+      MARIADB_DATABASE: prøve_eksamen
+      MARIADB_USER: eksamen_elev
+      MARIADB_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./db_init.sql:/docker-entrypoint-initdb.d/db_init.sql
+    ports:
+      - "3307:3306"
+
+  flask:
+    build: . # bruker dockerfile
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - "5010:5010"
+    env_file:
+      - .env
+    environment:
+      - DB_HOST=db
+    volumes:
+      - .:/app
+
+volumes:
+  db_data:

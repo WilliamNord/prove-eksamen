@@ -8,7 +8,7 @@
         <input type="hidden" name="user_id" value="{{ session.get('user_id') }}">
         {# brukeren må skrive brukenavnet for å slette brukeren #}
         {# inspirert av github :D #}
-        <input type="text" name="username" placeholder="Skriv <{{ session.get('username') }}> for å bekrefte" required>
+        <input type="text" name="username" placeholder="Skriv '{{ session.get('username') }}' for å bekrefte" required>
         <button type="submit">Slett bruker</button>
 
         <hr>

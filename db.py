@@ -1,3 +1,4 @@
+# db.py
 from dotenv import load_dotenv
 import os
 import mysql.connector
@@ -6,10 +7,9 @@ load_dotenv()
 
 def get_db():
     connection = mysql.connector.connect(
-        host="localhost",
-        user="eksamen_elev",
-        # henter passord fra .env filen
+        host=os.getenv("DB_HOST", "localhost"),
+        user=os.getenv("DB_USER", "eksamen_elev"),
         password=os.getenv("DB_PASSWORD"),
-        database="prøve_eksamen"
+        database=os.getenv("DB_NAME", "prøve_eksamen")
     )
     return connection
