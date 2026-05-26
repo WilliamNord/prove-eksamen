@@ -29,3 +29,7 @@ services:
 
 volumes:
   db_data:
+
+
+# docker-compose build
+# docker-compose up
