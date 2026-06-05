@@ -4,12 +4,15 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from cryptography.fernet import Fernet
 from dotenv import load_dotenv
 import os
+from flask_socketio import SocketIO, join_room
 
 #henter .env filen
 load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY")
+
+socketio = SocketIO(app, cors_allowed_origins="*")
 
 # henter krypteringsnøkkelen fra .env
 fernet = Fernet(os.getenv("MESSAGE_KEY"))
@@ -134,6 +137,22 @@ def send_message():
     )
     conn.commit()
     conn.close()
+    
+    print("SKAL SENDE SOCKET")
+    print("Til room:", receiver_id)
+    print("Fra:", session["username"])
+    print("Melding:", message)
+
+    socketio.emit(
+        "new_message",
+        {
+            "sender": session["username"],
+            "message": message
+        },
+        to=str(receiver_id)
+    )
+
+    print("SOCKET SENDT")
 
     return redirect(url_for("messages", other_user_id=receiver_id))
 
@@ -228,6 +247,19 @@ def dbtest():
     except Exception as e:
         return f"Database error: {e}"
 
+@socketio.on("join")
+def handle_join(data):
+
+    print("JOIN EVENT MOTTATT")
+    print(data)
+
+    join_room(str(data["user_id"]))
+
+    print(f"Bruker {data['user_id']} ble med i room.")
+
+@socketio.on("connect")
+def test_connect():
+    print("EN BRUKER KOBLET TIL")
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5010)
+    socketio.run(app, debug=True, port=5010)

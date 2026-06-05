@@ -61,4 +61,36 @@
 
 </div>
 
+<script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+
+<script>
+console.log("Script startet");
+
+const socket = io();
+
+socket.on("connect", () => {
+    console.log("Tilkoblet!");
+    console.log(socket.id);
+
+    socket.emit("join", {
+        user_id: "{{ session.get('user_id') }}"
+    });
+
+    console.log("Join sendt!");
+});
+
+
+socket.on("new_message", (data) => {
+    console.log("FIKK SOCKET EVENT");
+
+    const messagesDiv = document.querySelector(".messages");
+
+    const div = document.createElement("div");
+    div.classList.add("message");
+    div.innerHTML = `<strong>${data.sender}</strong>: ${data.message}`;
+
+    messagesDiv.appendChild(div);
+});
+</script>
+
 {% endblock %}
